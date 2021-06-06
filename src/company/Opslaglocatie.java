@@ -1,8 +1,9 @@
 package company;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Inventaris {
+public class Opslaglocatie {
     private String locatie;
     private ArrayList<Product> opslag = new ArrayList<>();
     private ArrayList<Product> verkocht = new ArrayList<>();
@@ -11,7 +12,7 @@ public class Inventaris {
         return opslag;
     }
     
-    public Inventaris(String locatie) {
+    public Opslaglocatie(String locatie) {
         this.locatie = locatie;
     }
     public String getLocatie(){return this.locatie;}
@@ -25,36 +26,40 @@ public class Inventaris {
         return null;
     }
 
-    public void verkoop(String productZoek, Double verkoopprijs){
+    public void verkoop(String productZoek, Double verkoopprijs, LocalDate date){
         Product p = this.getProductBijCode(productZoek, opslag);
-        if (p.getAantal()== 1) {
+        p.setDate(date);
+        p.EentjeVerkocht();
+
+        if (p.getAantal()== 0) {
             this.getOpslag().remove(p);
+        }
 
-        } else p.setAantal(p.getAantal() - 1);
-
-        Product p2 = this.getProductBijCode(productZoek, verkocht);
-        p2.setVerkoopprijs(verkoopprijs);
-        if (p2 == null) {
-            this.getOpslag().add(p2);
-        } else p2.setAantal(p2.getAantal() + 1);
+        p.setVerkoopprijs(verkoopprijs);
+        for(Product pr : verkocht){
+            if(pr.getProductcode().equals(productZoek)){
+                return;
+            }
+        }
+        verkocht.add(p);
     }
 
-    public Double berekenWinstMaand(Inventaris inventaris, int maand, int jaar){
+    public Double berekenWinstMaand(int maand, int jaar){
         Double result = 0D;
 
         for(Product p : verkocht){
             if(p.getMaand()==maand && p.getJaar() == jaar){
-                result += p.getVerkoopprijs() - p.getVerkoopprijs();
+                result += p.getVerkoopprijs() - p.getInkoopprijs();
             }
         }
         return result;
     }
 
-    public Double berekenWinstJaar(Inventaris inventaris, int jaar){
+    public Double berekenWinstJaar(int jaar){
         Double result = 0D;
         for(Product p : verkocht){
             if(p.getJaar()==jaar){
-                result += p.getVerkoopprijs() - p.getVerkoopprijs();
+                result += p.getVerkoopprijs() - p.getInkoopprijs();
             }
         }
         return result;

@@ -1,5 +1,6 @@
 package company;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Product {
@@ -7,11 +8,12 @@ public class Product {
     private String merk;
     private String kleur;
     private String productcode;
-    private Integer aantal; //kan wijzigen hoeveel
+    private Integer aantal;
+    private Integer aantalVerkocht;
     private Integer jaar = null;
     private Integer maand = null;
     private Double inkoopprijs;
-    private Double verkoopprijs = null;
+    private Double verkoopprijs =0D;
 
 
     public Product(String naam, String merk, String kleur, String productcode, Integer aantal, Double prijs) {
@@ -28,7 +30,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return naam + " | " + merk + " | " + kleur + " | " + productcode + " * " + aantal;
+        return naam + " | " + merk + " | " + kleur + " | " + productcode + "\naantal: " + aantal + "\nlocatie: ";
     }
 
     public Integer getAantal() {
@@ -73,5 +75,15 @@ public class Product {
 
     public void setVerkoopprijs(Double verkoopprijs) {
         this.verkoopprijs = verkoopprijs;
+    }
+
+    public void setDate(LocalDate date){
+        this.jaar = date.getYear();
+        this.maand = date.getMonth().getValue();
+    }
+
+    public void EentjeVerkocht(){
+        aantalVerkocht++;
+        aantal--;
     }
 }
